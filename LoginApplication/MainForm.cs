@@ -155,7 +155,7 @@ namespace LoginApplication
 
         private void StartUpLoginCheck_WorkerOnDoWork(object sender, DoWorkEventArgs e)
         {
-            var pingReply= new Ping().Send("10.254.254.53", 5000);
+            var pingReply = new Ping().Send("10.254.254.53", 5000);
 
             if (pingReply != null && pingReply.Status == IPStatus.Success)
             {
