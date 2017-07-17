@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.userNameTextBox = new System.Windows.Forms.TextBox();
             this.username_label = new System.Windows.Forms.Label();
             this.password_label = new System.Windows.Forms.Label();
@@ -104,6 +105,7 @@
             this.Controls.Add(this.password_label);
             this.Controls.Add(this.username_label);
             this.Controls.Add(this.userNameTextBox);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainForm";
             this.Text = "ISP Login";
             this.Load += new System.EventHandler(this.Form1_Load);

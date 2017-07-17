@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -21,6 +22,7 @@ namespace LoginApplication
         private string _userName;
         private string _password;
         private bool _logedIn = false;
+        private bool _isAlive = false;
 
         public MainForm()
         {
@@ -123,36 +125,45 @@ namespace LoginApplication
             {
                 if (!_logedIn)
                 {
-                    MessageBox.Show("Login Successfully!!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    _logedIn = true;
-                    log_inout_button.Text = "Logout";
                     log_inout_button.Enabled = true;
                     userNameTextBox.Enabled = false;
                     passwordTextBox.Enabled = false;
                     showPassCheckBox.Enabled = false;
                     username_label.Enabled = false;
                     password_label.Enabled = false;
+
+                    MessageBox.Show("Login Successfully!!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    _logedIn = true;
+                    log_inout_button.Text = "Logout";
                 }
                 else
                 {
+                    log_inout_button.Enabled = true;
+                    userNameTextBox.Enabled = true;
+                    passwordTextBox.Enabled = true;
+                    showPassCheckBox.Enabled = true;
+                    username_label.Enabled = true;
+                    password_label.Enabled = true;
+
                     MessageBox.Show("Logout Successfully!!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     log_inout_button.Text = "Log In";
                     _logedIn = false;
                 }
             }
-
-
-            log_inout_button.Enabled = true;
-            userNameTextBox.Enabled = true;
-            passwordTextBox.Enabled = true;
-            showPassCheckBox.Enabled = true;
-            username_label.Enabled = true;
-            password_label.Enabled = true;
         }
 
-        private void LoginCheck_WorkerOnDoWork(object sender, DoWorkEventArgs e)
+
+        private void StartUpLoginCheck_WorkerOnDoWork(object sender, DoWorkEventArgs e)
         {
-            _response = null;
+            var pingReply= new Ping().Send("10.254.254.53", 5000);
+
+            if (pingReply != null && pingReply.Status == IPStatus.Success)
+            {
+                _isAlive = true;
+            }
+
+            if (!_isAlive)
+                return;
 
             var webRequest = WebRequest.Create("http://10.254.254.53/0/wl/cklogin");
             webRequest.Method = "GET";
@@ -177,19 +188,25 @@ namespace LoginApplication
             {
             }
 
-            if (_response != null)
+            if (_response == null)
+                return;
+
+            var stringReader = new StringReader(_response);
+            var line = stringReader.ReadLine();
+            if (line != null && line.Equals("YES", StringComparison.OrdinalIgnoreCase))
             {
-                var stringReader = new StringReader(_response);
-                var line = stringReader.ReadLine();
-                if (line != null && line.Equals("YES", StringComparison.OrdinalIgnoreCase))
-                {
-                    _logedIn = true;
-                }
+                _logedIn = true;
             }
         }
 
-        private void LoginCheck_WorkerOnRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        private void StartUpLoginCheck_WorkerOnRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+            if (!_isAlive)
+            {
+                MessageBox.Show("Cannot connect to the ISP login server!!", "Connection Error", MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                System.Windows.Forms.Application.Exit();
+            }
             if (_logedIn)
             {
                 log_inout_button.Enabled = true;
@@ -219,8 +236,8 @@ namespace LoginApplication
             registryKey.Close();
 
             var loginCheck_Worker = new BackgroundWorker();
-            loginCheck_Worker.DoWork += LoginCheck_WorkerOnDoWork;
-            loginCheck_Worker.RunWorkerCompleted += LoginCheck_WorkerOnRunWorkerCompleted;
+            loginCheck_Worker.DoWork += StartUpLoginCheck_WorkerOnDoWork;
+            loginCheck_Worker.RunWorkerCompleted += StartUpLoginCheck_WorkerOnRunWorkerCompleted;
 
             log_inout_button.Enabled = false;
             userNameTextBox.Enabled = false;
