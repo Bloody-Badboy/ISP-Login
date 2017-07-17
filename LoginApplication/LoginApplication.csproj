@@ -113,7 +113,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Oxygen-Icons.org-Oxygen-Apps-preferences-system-login.ico" />
     <None Include="Resources\Oxygen-Icons.org-Oxygen-Apps-preferences-system-login.ico" />
   </ItemGroup>
   <ItemGroup>
