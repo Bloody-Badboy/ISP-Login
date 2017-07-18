@@ -159,6 +159,10 @@ namespace LoginApplication
                     _isAlreadyLogedIn = false;
                 }
             }
+            if (_isAutoLogin)
+            {
+                System.Windows.Forms.Application.Exit();
+            }
         }
 
 
@@ -263,21 +267,23 @@ namespace LoginApplication
             password_label.Enabled = false;
 
             loginCheckWorker.RunWorkerAsync();
+            if (_isAutoLogin)
+            {
+                var loginWorker = new BackgroundWorker();
+                loginWorker.DoWork += Login_WorkerOnDoWork;
+                loginWorker.RunWorkerCompleted += Login_WorkerOnRunWorkerCompleted;
 
-            var loginWorker = new BackgroundWorker();
-            loginWorker.DoWork += Login_WorkerOnDoWork;
-            loginWorker.RunWorkerCompleted += Login_WorkerOnRunWorkerCompleted;
-
-            log_inout_button.Enabled = false;
-            userNameTextBox.Enabled = false;
-            passwordTextBox.Enabled = false;
-            showPassCheckBox.Enabled = false;
-            autoLoginCheckBox.Enabled = false;
-            username_label.Enabled = false;
-            password_label.Enabled = false;
+                log_inout_button.Enabled = false;
+                userNameTextBox.Enabled = false;
+                passwordTextBox.Enabled = false;
+                showPassCheckBox.Enabled = false;
+                autoLoginCheckBox.Enabled = false;
+                username_label.Enabled = false;
+                password_label.Enabled = false;
 
 
-            loginWorker.RunWorkerAsync();
+                loginWorker.RunWorkerAsync();
+            }
         }
 
 
