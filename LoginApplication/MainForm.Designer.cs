@@ -35,6 +35,7 @@
             this.passwordTextBox = new System.Windows.Forms.TextBox();
             this.showPassCheckBox = new System.Windows.Forms.CheckBox();
             this.log_inout_button = new System.Windows.Forms.Button();
+            this.autoLoginCheckBox = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // userNameTextBox
@@ -86,7 +87,7 @@
             // log_inout_button
             // 
             this.log_inout_button.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.log_inout_button.Location = new System.Drawing.Point(18, 138);
+            this.log_inout_button.Location = new System.Drawing.Point(15, 165);
             this.log_inout_button.Name = "log_inout_button";
             this.log_inout_button.Size = new System.Drawing.Size(257, 31);
             this.log_inout_button.TabIndex = 5;
@@ -94,17 +95,31 @@
             this.log_inout_button.UseVisualStyleBackColor = true;
             this.log_inout_button.Click += new System.EventHandler(this.login_button_Click);
             // 
+            // autoLoginCheckBox
+            // 
+            this.autoLoginCheckBox.AutoSize = true;
+            this.autoLoginCheckBox.Location = new System.Drawing.Point(15, 138);
+            this.autoLoginCheckBox.Name = "autoLoginCheckBox";
+            this.autoLoginCheckBox.Size = new System.Drawing.Size(77, 17);
+            this.autoLoginCheckBox.TabIndex = 6;
+            this.autoLoginCheckBox.Text = "Auto Login";
+            this.autoLoginCheckBox.UseVisualStyleBackColor = true;
+            this.autoLoginCheckBox.CheckedChanged += new System.EventHandler(this.autoLoginCheckBox_CheckedChanged);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 180);
+            this.AutoSize = true;
+            this.ClientSize = new System.Drawing.Size(284, 208);
+            this.Controls.Add(this.autoLoginCheckBox);
             this.Controls.Add(this.log_inout_button);
             this.Controls.Add(this.showPassCheckBox);
             this.Controls.Add(this.passwordTextBox);
             this.Controls.Add(this.password_label);
             this.Controls.Add(this.username_label);
             this.Controls.Add(this.userNameTextBox);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainForm";
             this.Text = "ISP Login";
@@ -122,6 +137,7 @@
         private System.Windows.Forms.TextBox passwordTextBox;
         private System.Windows.Forms.CheckBox showPassCheckBox;
         private System.Windows.Forms.Button log_inout_button;
+        private System.Windows.Forms.CheckBox autoLoginCheckBox;
     }
 }
 
